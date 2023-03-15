@@ -17,11 +17,11 @@
       </select>
 
       <label for="rate">Rate:</label>
-      <input name="rate" type="range" min="0" max="3" value="1" step="0.1">
+      <input id="rate" name="rate" type="range" min="0" max="3" value="1" step="0.1">
 
       <label for="pitch">Pitch:</label>
 
-      <input name="pitch" type="range" min="0" max="2" step="0.1">
+      <input id="pitch" name="pitch" type="range" min="0" max="2" step="0.1">
       <textarea name="text">Hello! I love JavaScript 👍</textarea>
       <button id="stop">Stop!</button>
       <button id="speak">Speak</button>
@@ -35,7 +35,9 @@
   const options = document.querySelectorAll('[type="range"], [name="text"]');
   const speakButton = document.querySelector('#speak');
   const stopButton = document.querySelector('#stop');
-  const textarea = document.querySelector('textarea')
+  const textarea = document.querySelector('textarea');
+	const pitch = document.querySelector('#rate')
+  const rate = document.querySelector('#pitch')
   let voiceList = document.querySelector('select')
 
   voices();
@@ -60,6 +62,8 @@
           msg.voice = voice;
         }
     }
+	  msg.rate = rate.value
+    msg.pitch = pitch.value
     synth.speak(msg);
   }
 
