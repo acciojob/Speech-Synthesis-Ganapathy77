@@ -29,12 +29,51 @@
     </div>
 
 <script>
-  const msg = new SpeechSynthesisUtterance();
-  let voices = [];
+  let synth = speechSynthesis,
+  isSpeaking = true;
   const voicesDropdown = document.querySelector('[name="voice"]');
   const options = document.querySelectorAll('[type="range"], [name="text"]');
   const speakButton = document.querySelector('#speak');
   const stopButton = document.querySelector('#stop');
+  const textarea = document.querySelector('textarea')
+  let voiceList = document.querySelector('select')
+
+  voices();
+
+  function voices(){
+    console.log(speechSynthesis.getVoices())
+    for(let voice of synth.getVoices()){
+      console.log('ggg')
+      console.log(voiceList, voice.name)
+      let selected = voice.name === "Google US English" ? "selected" : "";
+      let option = `<option value="${voice.name}" ${selected}>${voice.name} (${voice.lang})</option>`;
+      voiceList.insertAdjacentHTML("beforeend", option);
+    }
+  }
+
+  synth.addEventListener("voiceschanged", voices);
+
+  function textToSpeech(text){
+    let msg = new SpeechSynthesisUtterance(text);
+    for(let voice of synth.getVoices()){
+        if(voice.name === voiceList.value){
+          msg.voice = voice;
+        }
+    }
+    synth.speak(msg);
+  }
+
+  speakButton.addEventListener('click', e =>{
+    e.preventDefault();
+    if(textarea.value != ""){
+      textToSpeech(textarea.value);
+    }
+    
+  })
+
+  stopButton.addEventListener('click', e =>{
+    synth.cancel();
+  })
 
   //Your code goes here
 </script>
